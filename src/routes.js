@@ -1,11 +1,10 @@
 import React from "react";
 
 // Admin Imports
-import MainDashboard from "views/admin/default";
-import NFTMarketplace from "views/admin/marketplace";
+import MainDashboard from "views/admin/users";
+import Veterinaries from "views/admin/vets"; // renamed for clarity
+import ServiceProviders from "views/admin/petservices";
 import Profile from "views/admin/profile";
-import DataTables from "views/admin/tables";
-import RTLDefault from "views/rtl/default";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
@@ -13,34 +12,42 @@ import SignIn from "views/auth/SignIn";
 // Icon Imports
 import {
   MdHome,
-  MdOutlineShoppingCart,
-  MdBarChart,
+  MdOutlineMedicalServices,
+  MdOutlinePets,
   MdPerson,
-  MdLock,
+  MdSettings,
 } from "react-icons/md";
+
 
 const routes = [
   {
-    name: "Main Dashboard",
+    name: "Users",
     layout: "/admin",
-    path: "default",
+    path: "users",
     icon: <MdHome className="h-6 w-6" />,
     component: <MainDashboard />,
   },
   {
-    name: "NFT Marketplace",
+    name: "Veterinaries",
     layout: "/admin",
-    path: "nft-marketplace",
-    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
-    component: <NFTMarketplace />,
+    path: "veterinaries",
+    icon: <MdOutlineMedicalServices className="h-6 w-6" />,
+    component: <Veterinaries />,
     secondary: true,
   },
   {
-    name: "Data Tables",
+    name: "Pet Services",
     layout: "/admin",
-    icon: <MdBarChart className="h-6 w-6" />,
-    path: "data-tables",
-    component: <DataTables />,
+    path: "pet-services",
+    icon: <MdOutlinePets className="h-6 w-6" />,
+    component: <ServiceProviders />,
+  },
+  {
+    name: "Settings",
+    layout: "/auth",
+    path: "settings",
+    icon: <MdSettings className="h-6 w-6" />,
+    component: <SignIn />,
   },
   {
     name: "Profile",
@@ -49,19 +56,6 @@ const routes = [
     icon: <MdPerson className="h-6 w-6" />,
     component: <Profile />,
   },
-  {
-    name: "Sign In",
-    layout: "/auth",
-    path: "sign-in",
-    icon: <MdLock className="h-6 w-6" />,
-    component: <SignIn />,
-  },
-  {
-    name: "RTL Admin",
-    layout: "/rtl",
-    path: "rtl",
-    icon: <MdHome className="h-6 w-6" />,
-    component: <RTLDefault />,
-  },
 ];
+
 export default routes;

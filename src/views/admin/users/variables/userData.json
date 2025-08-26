@@ -1,0 +1,38 @@
+[
+    {
+      "username": "Aditya Kumar",
+      "petSpecies": "Dog",
+      "subscriptionType": "Premium",
+      "rating": "4.8",
+      "verificationStatus": "Verified"
+    },
+    {
+      "username": "Neha Sharma",
+      "petSpecies": "Cat",
+      "subscriptionType": "Free",
+      "rating": "4.2",
+      "verificationStatus": "Not Verified"
+    },
+    {
+      "username": "Rohit Verma",
+      "petSpecies": "Parrot",
+      "subscriptionType": "Standard",
+      "rating": "3.9",
+      "verificationStatus": "Verified"
+    },
+    {
+      "username": "Sneha Iyer",
+      "petSpecies": "Rabbit",
+      "subscriptionType": "Premium",
+      "rating": "4.6",
+      "verificationStatus": "Verified"
+    },
+    {
+      "username": "Karan Mehta",
+      "petSpecies": "Dog",
+      "subscriptionType": "Free",
+      "rating": "3.5",
+      "verificationStatus": "Not Verified"
+    }
+  ]
+  

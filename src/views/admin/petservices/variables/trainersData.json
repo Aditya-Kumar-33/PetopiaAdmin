@@ -1,0 +1,21 @@
+[
+    {
+      "name": "David Lee",
+      "location": "New York",
+      "specialization": "Obedience Training",
+      "status": "Active"
+    },
+    {
+      "name": "Emma Wilson",
+      "location": "San Francisco",
+      "specialization": "Agility Training",
+      "status": "Active"
+    },
+    {
+      "name": "James Carter",
+      "location": "Houston",
+      "specialization": "Behavior Correction",
+      "status": "Inactive"
+    }
+  ]
+  
