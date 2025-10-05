@@ -2,24 +2,33 @@ import React from "react";
 
 // Admin Imports
 import MainDashboard from "views/admin/users";
-import Veterinaries from "views/admin/vets"; // renamed for clarity
+import Veterinaries from "views/admin/vets"; 
 import ServiceProviders from "views/admin/petservices";
 import Profile from "views/admin/profile";
+import SettingPage from "views/admin/settingPage";
+
+// Provider Imports
+import ProviderDashboard from "views/provider/dashboard";
+import Schedule from "views/provider/schedule";
+import History from "views/provider/schedule/components/History";
+import ProviderProfile from "views/provider/profile";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
 
-// Icon Imports
+// Icons
 import {
   MdHome,
   MdOutlineMedicalServices,
   MdOutlinePets,
   MdPerson,
   MdSettings,
+  MdOutlineSchedule
 } from "react-icons/md";
 
-
+// Array of route objects → each object defines one route
 const routes = [
+  // ----------------- ADMIN ROUTES -----------------
   {
     name: "Users",
     layout: "/admin",
@@ -49,12 +58,55 @@ const routes = [
     icon: <MdSettings className="h-6 w-6" />,
     component: <SignIn />,
   },
+    {
+    name: "Settings",
+    layout: "/admin",
+    path: "settings",
+    icon: <MdSettings className="h-6 w-6" />,
+    component: <SettingPage />,
+  },
   {
     name: "Profile",
     layout: "/admin",
     path: "profile",
     icon: <MdPerson className="h-6 w-6" />,
     component: <Profile />,
+  },
+
+  // ----------------- PROVIDER ROUTES -----------------
+  {
+    name: "Dashboard",
+    layout: "/provider",
+    path: "dashboard",
+    icon: <MdOutlinePets className="h-6 w-6" />,
+    component: <ProviderDashboard />,
+    showInSidebar: true,
+    showInNavbar: true,
+  },
+  {
+    name: "Schedule",
+    layout: "/provider",
+    path: "schedule",
+    icon: <MdOutlineSchedule className="h-6 w-6" />,
+    component: <Schedule />,
+    showInSidebar: true,
+    showInNavbar: true,
+    // ✅ Children routes
+    children: [
+      {
+        path: "history", // /provider/schedule/history
+        component: <History />,
+      },
+    ],
+  },
+  {
+    name: "Profile",
+    layout: "/provider",
+    path: "profile",
+    icon: <MdPerson className="h-6 w-6" />,
+    component: <ProviderProfile />,
+    showInSidebar: true,
+    showInNavbar: true,
   },
 ];
 
