@@ -1,117 +1,89 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { MdEdit } from "react-icons/md";
+import { useParams, useNavigate } from 'react-router-dom';
 
-import Card from './components/Card';
-import ImageUploadCard from './components/ImageUploadCard';
-import EditableList from './components/EditableList';
-import RatingEditor from './components/RatingEditor';
+import Card from './Card';
+import ImageUploadCard from './ImageUploadCard';
+import EditableList from './EditableList';
+import RatingEditor from './RatingEditor';
+import { request } from '../../../../utils/api';
+
+// Default template for creating a new breed
+const DEFAULT_BREED = {
+  breed: '',
+  species: '',
+  slug: '',
+  general_info: {
+    breedGroup: '',
+    description: '',
+    temperament: '',
+    height: '',
+    weight: '',
+    lifeExpectancy: ''
+  },
+  ratings: {
+    energyLevel: 3,
+    vocalizationLevel: 3,
+    drooling: 3,
+    shedding: 3,
+    groomingNeeds: 3,
+    trainability: 3,
+    compatibilityWithKids: 3,
+    compatibilityWithOtherPets: 3,
+    apartmentSuitability: 3,
+    canStayAlone: 3,
+    familyFriendly: 3,
+    warmWeatherSuitability: 3,
+    coldWeatherSuitability: 3,
+  },
+  physical_characteristics: {
+    ears: '', head: '', fur: '', body: '', tail: ''
+  },
+  history: [],
+  care: { exercise: '', grooming: '', training: '' },
+  diet: { recommended: [], notRecommended: [] },
+  health: { commonIssues: [], symptomsToWatch: [], preventiveTips: [] },
+  owner_tips: [],
+  images: { primary: '', secondary: '' }
+};
 
 const BreedInfoEditor = () => {
-  const initialData = {
-    breed: "German Shepherd",
-    species: "Dog",
-    general_info: {
-      breedGroup: "Working",
-      description: "German Shepherds are intelligent, loyal, and protective dogs.",
-      temperament: "Smart, loyal, and protective",
-      height: "22 to 26 inches",
-      weight: "50 to 90 pounds",
-      lifeExpectancy: "7 to 10 years"
-    },
-    ratings: {
-      energyLevel: 5,
-      barkingLevel: 4,
-      drooling: 1,
-      shedding: 5,
-      groomingNeeds: 5,
-      trainability: 5,
-      compatibilityWithKids: 4,
-      compatibilityWithOtherPets: 2,
-      apartmentSuitability: 2,
-      canStayAlone: 1,
-      familyFriendly: 3,
-      warmWeatherSuitability: 3,
-      coldWeatherSuitability: 4
-    },
-    physical_characteristics: {
-      ears: "Ears pert ending in point, slant forward to frame face.",
-      head: "Well-proportioned wedge-shaped head, strong muzzle.",
-      fur: "Thick undercoat, coarse top coat, distinctive colorings of deep black and tan, silver, and white.",
-      body: "Muscular, strong body, lanky with sense of balance and even proportion, firm ribs and chest, not stocky.",
-      tail: "Thick, long hair on tail, slightly longer on underside."
-    },
-    history: [
-      "German Shepherds were originally bred in Germany in the late 19th century.",
-      "They were developed for intelligence and herding ability."
-    ],
-    care: {
-      exercise: "Regular exercise maintains physical and mental health.",
-      grooming: "Requires regular brushing.",
-      training: "Early obedience training is essential."
-    },
-    diet: {
-      recommended: [
-        "High-quality protein (chicken, beef, fish)",
-        "Vegetables and fruits (carrots, apples, blueberries)",
-        "Whole grains (brown rice, oatmeal)"
-      ],
-      notRecommended: [
-        "Chocolate",
-        "Grapes and raisins",
-        "Onions and garlic",
-        "Processed foods"
-      ]
-    },
-    health: {
-      commonIssues: [
-        "Hip Dysplasia",
-        "Degenerative Myelopathy",
-        "Bloat"
-      ],
-      symptomsToWatch: [
-        "Swollen abdomen",
-        "Retching",
-        "Drooling",
-        "Lethargy"
-      ],
-      preventiveTips: [
-        "Feed smaller meals frequently.",
-        "Avoid heavy exercise after meals."
-      ]
-    },
-    owner_tips: [
-      "Provide daily exercise.",
-      "Offer mental stimulation.",
-      "Be patient with training."
-    ],
-    images: {
-      primary: 'https://via.placeholder.com/600x400',
-      secondary: 'https://via.placeholder.com/600x400'
-    }
-  };
+  const { slug } = useParams();
+  const navigate = useNavigate();
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [tempData, setTempData] = useState({ ...initialData });
+  const [isEditing, setIsEditing] = useState(slug === 'new');
+  const [data, setData] = useState(null);
+  const [tempData, setTempData] = useState(null);
+  const [err, setErr] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  const loadBreedData = useCallback(async () => {
+    // Creation mode: initialize with defaults and skip fetch
+    if (slug === 'new') {
+      setData(null);
+      setTempData(DEFAULT_BREED);
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    try {
+      const breed = await request(`/api/breeds/${slug}`);
+      setData(breed);
+      setTempData(breed);
+    } catch (e) {
+      setErr(e.message || 'Failed to load breed');
+    } finally {
+      setLoading(false);
+    }
+  }, [slug]);
 
   useEffect(() => {
-    if (!isEditing) {
-      setTempData({ ...initialData });
-    }
-  }, [isEditing]);
+    loadBreedData();
+  }, [loadBreedData]);
 
-  const handleEdit = () => {
-    setIsEditing(true);
-    setTempData({ ...initialData });
-  };
-
-  const handleSave = () => {
-    console.log('Saved data:', tempData); // Placeholder for future MongoDB integration
-    setIsEditing(false);
-  };
-
-  const handleCancel = () => {
-    setTempData({ ...initialData });
-    setIsEditing(false);
+  // User-friendly labels for specific rating fields
+  const RATING_LABELS = {
+    vocalizationLevel: 'Noise Level',
   };
 
   const handleInputChange = (field, value, section = null) => {
@@ -131,80 +103,154 @@ const BreedInfoEditor = () => {
     }
   };
 
+  // Update item inside a top-level array field
   const handleArrayChange = (field, index, value) => {
-    setTempData(prev => ({
+    setTempData((prev) => ({
       ...prev,
-      [field]: prev[field].map((item, i) => i === index ? value : item)
+      [field]: prev?.[field]?.map((item, i) => (i === index ? value : item)) || [],
     }));
   };
 
+  // Update item inside a nested array (e.g., diet.recommended)
   const handleNestedArrayChange = (section, field, index, value) => {
-    setTempData(prev => ({
+    setTempData((prev) => ({
       ...prev,
       [section]: {
         ...prev[section],
-        [field]: prev[section][field].map((item, i) => i === index ? value : item)
-      }
+        [field]: prev?.[section]?.[field]?.map((item, i) => (i === index ? value : item)) || [],
+      },
     }));
   };
 
-  const addArrayItem = (field, defaultValue = '') => {
-    setTempData(prev => ({
+  const addArrayItem = (field, defaultValue = "") => {
+    setTempData((prev) => ({
       ...prev,
-      [field]: [...prev[field], defaultValue]
+      [field]: [...(prev?.[field] || []), defaultValue],
     }));
   };
 
-  const addNestedArrayItem = (section, field, defaultValue = '') => {
-    setTempData(prev => ({
+  const addNestedArrayItem = (section, field, defaultValue = "") => {
+    setTempData((prev) => ({
       ...prev,
       [section]: {
         ...prev[section],
-        [field]: [...prev[section][field], defaultValue]
-      }
+        [field]: [...(prev?.[section]?.[field] || []), defaultValue],
+      },
     }));
   };
 
   const removeArrayItem = (field, index) => {
-    setTempData(prev => ({
+    setTempData((prev) => ({
       ...prev,
-      [field]: prev[field].filter((_, i) => i !== index)
+      [field]: (prev?.[field] || []).filter((_, i) => i !== index),
     }));
   };
 
   const removeNestedArrayItem = (section, field, index) => {
-    setTempData(prev => ({
+    setTempData((prev) => ({
       ...prev,
       [section]: {
         ...prev[section],
-        [field]: prev[section][field].filter((_, i) => i !== index)
-      }
+        [field]: (prev?.[section]?.[field] || []).filter((_, i) => i !== index),
+      },
     }));
   };
 
-  const handleImageUpload = (field) => {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
-    fileInput.onchange = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const fakeUrl = URL.createObjectURL(file);
-        setTempData(prev => ({
+  // Local image picker with preview; optionally integrate server upload later
+  const handleImageUpload = (imgType) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      if (!data?.id) {
+        const previewUrl = URL.createObjectURL(file);
+        setTempData((prev) => ({
           ...prev,
-          images: {
-            ...prev.images,
-            [field]: fakeUrl
-          }
+          images: { ...(prev?.images || {}), [imgType]: previewUrl },
         }));
+        setErr('Save the breed first, then upload images.');
+        return;
+      }
+
+      try {
+        const form = new FormData();
+        form.append('image', file);
+        const res = await request(`/api/breeds/${data.id}/images?type=${imgType}`, {
+          method: 'PATCH',
+          body: form,
+        });
+        if (res?.images) {
+          setTempData((prev) => ({ ...prev, images: res.images }));
+          setErr('');
+        }
+      } catch (e) {
+        setErr(e.message || 'Failed to upload image');
       }
     };
-    fileInput.click();
+    input.click();
   };
+
+  const handleSave = async () => {
+    try {
+      // Basic client-side validation to avoid 500s on required fields
+      if (!tempData?.breed?.trim() || !tempData?.species?.trim()) {
+        setErr('Breed and Species are required.');
+        return;
+      }
+      // Do not send images in the main payload; images are handled via PATCH /images
+      const { images: _images, ...payload } = tempData || {};
+      let updatedBreed;
+      if (data && data.id) {
+        // Update existing breed
+        updatedBreed = await request(`/api/breeds/${data.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } else {
+        // Create new breed
+        updatedBreed = await request(`/api/breeds`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      }
+      setData(updatedBreed);
+      setTempData(updatedBreed);
+      setIsEditing(false);
+
+      // If we just created a new one, navigate to its slug route
+      if (slug === 'new' && updatedBreed?.slug) {
+        navigate(`/admin/breed-info/${updatedBreed.slug}`, { replace: true });
+      }
+    } catch (e) {
+      setErr(e.message || 'Failed to save breed');
+    }
+  };
+
+  const handleCancel = () => {
+    setTempData(data);
+    setIsEditing(false);
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (err) return <div>{err}</div>;
 
   return (
     <div className="space-y-6 p-6">
-      {/* General Information Card */}
+      {err ? (
+        <div className="rounded-md border border-red-300 bg-red-50 p-3 text-red-700 text-sm">
+          {err}
+        </div>
+      ) : null}
+      
       <Card className="rounded-2xl bg-white bg-clip-border p-6 font-dm shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:shadow-none">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -318,7 +364,7 @@ const BreedInfoEditor = () => {
               key={key}
               value={tempData.ratings[key]}
               onChange={(value) => handleInputChange(key, value, 'ratings')}
-              label={key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+              label={RATING_LABELS[key] || key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
               isEditing={isEditing}
             />
           ))}

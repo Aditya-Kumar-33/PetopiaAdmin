@@ -8,7 +8,7 @@ const ImageUploadCard = ({ src, onChange, label, isEditing }) => (
     </label>
     <div className="relative h-48 rounded-xl overflow-hidden bg-gray-200 dark:bg-navy-700 group shadow-sm">
       <img
-        src={src || `https://via.placeholder.com/600x400?text=${label}`}
+        src={src || "/logo_transparent.png"}
         alt={label}
         className="w-full h-full object-cover"
       />

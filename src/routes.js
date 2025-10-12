@@ -6,6 +6,7 @@ import Veterinaries from "views/admin/vets";
 import ServiceProviders from "views/admin/petservices";
 import Profile from "views/admin/profile";
 import SettingPage from "views/admin/settingPage";
+import BreedInfoEditor from "views/admin/settingPage/components/BreedInfoEditor";
 
 // Provider Imports
 import ProviderDashboard from "views/provider/dashboard";
@@ -58,12 +59,20 @@ const routes = [
     icon: <MdSettings className="h-6 w-6" />,
     component: <SignIn />,
   },
-    {
+  {
     name: "Settings",
     layout: "/admin",
     path: "settings",
     icon: <MdSettings className="h-6 w-6" />,
     component: <SettingPage />,
+  },
+  {
+    name: "Breed Editor",
+    layout: "/admin",
+    path: "breed-info/:slug",
+    icon: <MdSettings className="h-6 w-6" />,
+    component: <BreedInfoEditor />,
+    showInSidebar: false,
   },
   {
     name: "Profile",
