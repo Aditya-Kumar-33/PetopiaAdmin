@@ -2,17 +2,17 @@ import React from "react";
 
 // Admin Imports
 import MainDashboard from "views/admin/users";
-import Veterinaries from "views/admin/vets"; 
-import ServiceProviders from "views/admin/petservices";
+import Veterinaries from "views/admin/providers"; 
 import Profile from "views/admin/profile";
 import SettingPage from "views/admin/settingPage";
 import BreedInfoEditor from "views/admin/settingPage/components/BreedInfoEditor";
+import UserProfile from "views/admin/users/UserProfile"; 
+import ProviderProfile from "views/admin/providers/ProviderProfile";
 
 // Provider Imports
 import ProviderDashboard from "views/provider/dashboard";
 import Schedule from "views/provider/schedule";
 import History from "views/provider/schedule/components/History";
-import ProviderProfile from "views/provider/profile";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
@@ -33,37 +33,46 @@ const routes = [
   {
     name: "Users",
     layout: "/admin",
-    path: "users",
+    path: "user-dashboard",
     icon: <MdHome className="h-6 w-6" />,
     component: <MainDashboard />,
   },
   {
-    name: "Veterinaries",
+    name: "User Profile",
     layout: "/admin",
-    path: "veterinaries",
-    icon: <MdOutlineMedicalServices className="h-6 w-6" />,
+    path: "user-dashboard/:userId",
+    icon: <MdPerson className="h-6 w-6" />,
+    component: <UserProfile />,
+    showInSidebar: false,   // completely hides it from menu
+  },
+  {
+    name: "Providers",
+    layout: "/admin",
+    path: "provider-dashboard",
+    icon: <MdSettings className="h-6 w-6" />,
     component: <Veterinaries />,
     secondary: true,
   },
-  {
-    name: "Pet Services",
+    {
+    name: "Provider Profile",
     layout: "/admin",
-    path: "pet-services",
-    icon: <MdOutlinePets className="h-6 w-6" />,
-    component: <ServiceProviders />,
+    path: "provider-dashboard/:Id",
+    icon: <MdPerson className="h-6 w-6" />,
+    component: <ProviderProfile />,
+    showInSidebar: false,   // completely hides it from menu
   },
   {
-    name: "Settings",
+    name: "Sign In",
     layout: "/auth",
-    path: "settings",
-    icon: <MdSettings className="h-6 w-6" />,
+    path: "manage-pet",
+    icon: <MdPerson className="h-6 w-6" />,
     component: <SignIn />,
   },
   {
-    name: "Settings",
+    name: "Manage Breeds",
     layout: "/admin",
-    path: "settings",
-    icon: <MdSettings className="h-6 w-6" />,
+    path: "manage-breeds",
+    icon: <MdOutlinePets className="h-6 w-6" />,
     component: <SettingPage />,
   },
   {

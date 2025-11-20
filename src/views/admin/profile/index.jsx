@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Banner from "./components/Banner";
 import Editor from "./components/Editor";
-import WeeklyRevenue from "./components/WeeklyRevenue";
-import PieChartCard from "./components/PieChartCard";
+
 
 const ProfileOverview = () => {
   // Shared state for profile data
@@ -18,17 +17,7 @@ const ProfileOverview = () => {
     users: '9.7K',
     providers: 434
   });
-  const revenueData = {
-    subscribers: 40,
-    vets: 25,
-    groomers: 15,
-    trainers: 10,
-    caretakers: 10
-  };
-  const revenueOptions = {
-    labels: ["Subscribers", "Vets", "Groomers", "Trainers", "Pet Care Takers"],
-    legend: { show: false },
-  };
+
   // Function to update profile data
   const updateProfileData = (newData) => {
     setProfileData(prevData => ({
@@ -66,15 +55,7 @@ const ProfileOverview = () => {
         </div>
       </div>
 
-      {/* Weekly Revenue and Pie Chart with 60/40 split */}
-      <div className="grid h-full grid-cols-1 gap-5 lg:grid-cols-5">
-        <div className="col-span-1 lg:col-span-3 lg:mb-0">
-          <WeeklyRevenue />
-        </div>
-        <div className="h-full col-span-1 lg:col-span-2 lg:mb-0">
-          <PieChartCard data={revenueData} options={revenueOptions} />;
-        </div>
-      </div>
+
     </div>
   );
 };

@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const columnHelper = createColumnHelper();
 
-export default function UserTable({ userData }) {
+export default function ProviderTable({ userData }) {
   const [sorting, setSorting] = React.useState([]);
   const [searchTerm, setSearchTerm] = React.useState("");
   const [pageIndex, setPageIndex] = React.useState(0);
@@ -194,7 +194,7 @@ export default function UserTable({ userData }) {
               <tr
                 key={row.id}
                 onClick={() =>
-                  navigate(`/admin/user-dashboard/${row.original.userId}`)
+                  navigate(`/admin/provider-dashboard/${row.original.userId}`)
                 }
                 className="cursor-pointer hover:bg-gray-50 dark:hover:bg-navy-700/50"
               >
